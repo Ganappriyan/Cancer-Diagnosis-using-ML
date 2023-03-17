@@ -8,7 +8,7 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-import keras_tuner as kt
+# import keras_tuner as kt
 
 print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
