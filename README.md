@@ -1,13 +1,14 @@
 # Cancer-Diagnosis-using-ML
 
 
-## Packages Needed:
+## Packages Needed (MAC):
 
 xcode-select --install
 
 brew install graphviz
 pip install pydot
 pip install graphviz
+pip install django
 
 conda install -c apple tensorflow-deps
 pip install tensorflow-macos==2.9
