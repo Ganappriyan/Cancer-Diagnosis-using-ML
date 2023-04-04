@@ -1,7 +1,8 @@
 from django.urls import path, include
-from frontend.views import login, create_user
+from .views import home
+
 
 urlpatterns = [
-    path('login/', login, name='login'),
-    path('create-user/', create_user, name='create_user'),
+    path('', home, name='home'),
+    path('accounts/', include('users_handler.urls')),
 ]
