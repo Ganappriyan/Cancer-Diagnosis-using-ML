@@ -1,5 +1,2 @@
 modelsDir = "models/"
 dataDir = "data/"
-trainDir = dataDir + "train/"
-valDir = dataDir + "val/"
-testDir = dataDir + "test/"

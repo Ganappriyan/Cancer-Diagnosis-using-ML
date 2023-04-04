@@ -1,30 +1,60 @@
 import tensorflow as tf
 import os
 
-from filepaths import modelsDir, trainDir, valDir
+from filepaths import modelsDir, dataDir
 from model_definition import SegmentationModel
 
 class CNNModel:
     
-    def __init__(self, modelname):
+    def __init__(self, modelname, filename, modelkind='simple'):
+        self.modelkind = modelkind
         self.modelname = modelname
-        if os.path.exists(modelsDir + self.modelname + ".h5"):
-            self.model = tf.keras.models.load_model(modelsDir + self.modelname + ".h5")
-        else:
-            self.create()
-    
-    def create(self):
-        self.model = SegmentationModel().model
-        self.model.summary() # TODO: Remove this Line
-        
-        self.image_generator = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1/255) # TODO: Remove unwanted method variables
+        self.filename = filename
+        self.image_generator = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1/255, validation_split=0.2)
         self.callbacks = [
             tf.keras.callbacks.EarlyStopping(
-                monitor='val_loss', 
-                patience=5, 
-                restore_best_weights=True, 
+                monitor='val_loss',
+                patience=5,
+                restore_best_weights=True,
             )
         ]
+        self.train_generator = self.image_generator.flow_from_directory(
+            directory=dataDir+self.modelname+"/",
+            target_size=(512, 512),
+            batch_size=32,
+            class_mode='categorical',
+            subset='training',
+        )
+        self.validation_generator = self.image_generator.flow_from_directory(
+            directory=dataDir+self.modelname+"/",
+            target_size=(512, 512),
+            batch_size=32,
+            class_mode='categorical',
+            subset='validation',
+        )
+        self.classes = self.train_generator.class_indices
+        print("Classes: " + str(self.classes)) # TODO: Remove this print
+        
+        if os.path.exists(modelsDir + modelname + "/" + filename):
+            print("Loading model: " + filename) # TODO: Remove this print
+            self.model = tf.keras.models.load_model(modelsDir + modelname + "/" + filename)
+        else:
+            print("Creating new model") # TODO: Remove this print
+            self.create()
+            
+    def create(self):
+        if not os.path.exists(dataDir + self.modelname):
+            os.mkdir(dataDir + self.modelname)
+        if not os.path.exists(modelsDir + self.modelname):
+            os.mkdir(modelsDir + self.modelname)
+        
+        img_shape = self.train_generator.image_shape
+        print("Image shape: " + str(img_shape)) # TODO: Remove this print
+        
+        self.model = SegmentationModel(modelname=self.modelkind, 
+                                       input_shape=(img_shape[0], img_shape[1], 3), 
+                                       classes=len(self.classes)).model
+        
         self.model.compile(
             optimizer='adam',
             loss=tf.keras.losses.CategoricalCrossentropy(from_logits=True),
@@ -32,27 +62,24 @@ class CNNModel:
         )
         
     def train(self, epochs=20):
-        train_generator = self.image_generator.flow_from_directory(
-            directory=trainDir,
-            target_size=(512, 512),
-            batch_size=32,
-            class_mode='categorical'
-        )
-        validation_generator = self.image_generator.flow_from_directory(
-            directory=valDir,
-            target_size=(512, 512),
-            batch_size=32,
-            class_mode='categorical'
-        )
         self.model.fit(
-            train_generator,
-            validation_data=validation_generator,
+            self.train_generator,
+            validation_data=self.validation_generator,
             epochs=epochs,
             callbacks=self.callbacks
         )
         
-    def predict(self, x):
-        return self.model.predict(x)
+    def predict(self, filepath):
+        img = tf.keras.preprocessing.image.load_img(filepath, target_size=(512,512))
+        x = tf.keras.preprocessing.image.img_to_array(img)
+        x = tf.expand_dims(x, axis=0)
+        predictions = self.model.predict(x)
+        return {k: str(predictions[0][v]) for k, v in self.classes.items()}
     
-    def save(self):
-        self.model.save(modelsDir + self.modelname + ".h5")
+    def save(self, filename=None):
+        if not os.path.exists(modelsDir + self.modelname):
+            os.mkdir(modelsDir + self.modelname)
+        
+        if filename:
+            self.model.save(modelsDir + self.modelname + "/" + filename)
+        self.model.save(modelsDir + self.modelname + "/" + self.filename)
