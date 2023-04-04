@@ -1,5 +1,4 @@
 .vscode
 __pycache__
 
-Flask
-cancer_diagnosis1
+data
