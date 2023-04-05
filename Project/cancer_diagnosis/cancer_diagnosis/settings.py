@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     
     'users_handler',
     'frontend',
+    'image_processor',
 ]
 
 MIDDLEWARE = [
