@@ -1,5 +1,6 @@
 import tensorflow as tf
 import os
+import json
 
 from filepaths import modelsDir, dataDir
 from model_definition import SegmentationModel
@@ -68,13 +69,13 @@ class CNNModel:
             epochs=epochs,
             callbacks=self.callbacks
         )
-        
-    def predict(self, filepath):
-        img = tf.keras.preprocessing.image.load_img(filepath, target_size=(512,512))
-        x = tf.keras.preprocessing.image.img_to_array(img)
-        x = tf.expand_dims(x, axis=0)
-        predictions = self.model.predict(x)
-        return {k: str(predictions[0][v]) for k, v in self.classes.items()}
+    
+    def predict(self, img_bytes):
+        img = tf.image.decode_image(img_bytes)
+        img = tf.expand_dims(img, axis=0)
+        img = tf.image.resize(img, (512, 512))
+        predictions = self.model.predict(img)
+        return {k: float(predictions[0][v]) for k, v in self.classes.items()}
     
     def save(self, filename=None):
         if not os.path.exists(modelsDir + self.modelname):
