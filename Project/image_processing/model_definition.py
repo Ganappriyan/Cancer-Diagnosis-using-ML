@@ -24,7 +24,7 @@ class SegmentationModel():
         X = MaxPooling2D((2, 2))(X)
         X = Flatten()(X)
         X = Dense(256, activation='relu')(X)
-        X = Dense(self.classes, activation=None)(X)
+        X = Dense(self.classes, activation="softmax")(X)
         
         SegmentationModel.model = Model(inputs=inputData, outputs=X)
     
