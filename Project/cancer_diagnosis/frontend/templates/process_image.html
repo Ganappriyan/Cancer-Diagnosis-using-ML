@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Process Image</h1>
+  {% if error_message %}
+    <p style="color: red">{{ error_message }}</p>
+  {% endif %}
+  {% if response_text %}
+    <p>Server response: {{ response_text }}</p>
+  {% endif %}
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="file">
+    <br><br>
+    <input type="submit" value="Process">
+  </form>
+{% endblock %}

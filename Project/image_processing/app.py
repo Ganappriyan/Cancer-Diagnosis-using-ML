@@ -21,3 +21,8 @@ async def classify_image(file: UploadFile = File(...)):
 async def grade_images(file: UploadFile = File(...)):
     img_bytes = await file.read()
     return grading_model.predict(img_bytes)
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8001)
+    
