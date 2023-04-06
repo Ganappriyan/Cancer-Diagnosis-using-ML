@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
-import requests
 from django.contrib.auth.decorators import login_required
 from django.core.validators import validate_image_file_extension
 from django.core.exceptions import ValidationError
 from image_processor.models import JsonResponse
 import json
+import requests
 
 @login_required
 def process_image(request):
