@@ -5,3 +5,4 @@ data
 models
 temp.jpg
 migrations
+.ipynb_checkpoints
