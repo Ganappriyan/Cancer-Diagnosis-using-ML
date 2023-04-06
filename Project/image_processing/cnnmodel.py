@@ -1,6 +1,5 @@
 import tensorflow as tf
 import os
-import json
 
 from filepaths import modelsDir, dataDir
 from model_definition import SegmentationModel
@@ -34,13 +33,10 @@ class CNNModel:
             subset='validation',
         )
         self.classes = self.train_generator.class_indices
-        print("Classes: " + str(self.classes)) # TODO: Remove this print
         
         if os.path.exists(modelsDir + modelname + "/" + filename):
-            print("Loading model: " + filename) # TODO: Remove this print
             self.model = tf.keras.models.load_model(modelsDir + modelname + "/" + filename)
         else:
-            print("Creating new model") # TODO: Remove this print
             self.create()
             
     def create(self):
@@ -50,7 +46,6 @@ class CNNModel:
             os.mkdir(modelsDir + self.modelname)
         
         img_shape = self.train_generator.image_shape
-        print("Image shape: " + str(img_shape)) # TODO: Remove this print
         
         self.model = SegmentationModel(modelname=self.modelkind, 
                                        input_shape=(img_shape[0], img_shape[1], 3), 

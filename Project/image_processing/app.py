@@ -1,5 +1,4 @@
 from fastapi import FastAPI, File, UploadFile
-from typing import List
 from cnnmodel import CNNModel
 import json
 
