@@ -75,7 +75,9 @@ class CNNModel:
         img = tf.expand_dims(img, axis=0)
         img = tf.image.resize(img, (512, 512))
         predictions = self.model.predict(img)
-        return {k: float(predictions[0][v]) for k, v in self.classes.items()}
+        dict_obj = {k: float(predictions[0][v]) for k, v in self.classes.items()}
+        dict_obj['maxlabel'] = max(dict_obj, key=dict_obj.get)
+        return dict_obj
     
     def save(self, filename=None):
         if not os.path.exists(modelsDir + self.modelname):

@@ -1,25 +1,76 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>{% block title %}Cancer Diagnosis{% endblock %}</title>
-  </head>
-  <body>
-    <nav>
-      <ul>
-        <li><a href="{% url 'home' %}">Home</a></li>
-        {% if user.is_authenticated %}
-        <li><a href="{% url 'process_image' %}">Process Image</a></li>
-          <li><a href="{% url 'logout' %}">Logout ({{ user.username }})</a></li>
-        {% else %}
-          <li><a href="{% url 'register' %}">Register</a></li>
-          <li><a href="{% url 'login' %}">Login</a></li>
-        {% endif %}
-      </ul>
+
+<head>
+  <title>{% block title %}Cancer Diagnosis{% endblock %}</title>
+  <!-- Bootstrap 5 CDN links -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <div class="d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Cancer Diagnosis</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'home' %}">Home</a>
+            </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'process_image' %}">Process Image</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt">
+                </i> Logout ({{ user.username }})</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'register' %}">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
     </nav>
-    
-    <main>
+    <main class="container mt-4 flex-grow-1">
       {% block content %}
       {% endblock %}
     </main>
-  </body>
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12 col-md-6 text-center text-md-start">
+            <p class="mb-0"><b>Project Github Link:</b> <a
+                href="https://github.com/Ganappriyan/Cancer-Diagnosis-using-ML" target="_blank"><i
+                  class="fab fa-github"></i></a></p>
+          </div>
+          <div class="col-12 col-md-6 text-center text-md-end">
+            <p class="mb-0">
+              <b>Contributors:</b> Ganappriyan: <a href="https://github.com/Ganappriyan" target="_blank"><i
+                  class="fab fa-github"></i></a>, Dhivya Dharshini M: <a href="https://github.com/dhivyamuthumanickam"
+                target="_blank"><i class="fab fa-github"></i></a>, Subavarshini S: <a
+                href="https://github.com/subavarshinis" target="_blank"><i class="fab fa-github"></i></a>, Sathiya
+              Moorthy
+              S: <a href="https://github.com/Sathiya10" target="_blank"><i class="fab fa-github"></i></a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+
 </html>

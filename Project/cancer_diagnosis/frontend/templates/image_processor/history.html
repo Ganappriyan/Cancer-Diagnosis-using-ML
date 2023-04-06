@@ -1,15 +1,56 @@
 {% extends 'base.html' %}
-
 {% block content %}
-  <h1>Previous Image Processing Results</h1>
-  
-  {% if json_responses %}
-    <ul>
+<h1>Previous Image Processing Results</h1>
+{% if json_responses %}
+<div class="table-responsive">
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Result</th>
+        <th>Classification</th>
+      </tr>
+    </thead>
+    <tbody>
       {% for json_response in json_responses %}
-        <li>{{ json_response.created_at }}: {{ json_response.response_text }}</li>
+      <tr>
+        <td>{{ json_response.created_at }}</td>
+        <td>
+          {% if json_response.grading == 'hsil' %}
+          High-grade squamous intraepithelial lesion
+          {% elif json_response.grading == 'lsil' %}
+          Low-grade squamous intraepithelial lesion
+          {% elif json_response.grading == 'normal' %}
+          Negative for intraepithelial malignancy
+          {% elif json_response.grading == 'scc' %}
+          Squamous cell carcinoma
+          {% endif %}
+        </td>
+        {% if json_response.classification %}
+        <td>
+          {% if json_response.classification == 'cervix_dyk' %}
+          Dyskeratotic Cell
+          {% elif json_response.classification == 'cervix_koc' %}
+          Koilocytic Cell
+          {% elif json_response.classification == 'cervix_mep' %}
+          Metaplastic Cell
+          {% elif json_response.classification == 'cervix_pab' %}
+          Parabasal Cell
+          {% elif json_response.classification == 'cervix_sfi' %}
+          Superficial-Intermediate Cell
+          {% endif %}
+        </td>
+        {% endif %}
+      </tr>
       {% endfor %}
-    </ul>
-  {% else %}
-    <p>No previous image processing results.</p>
-  {% endif %}
+    </tbody>
+  </table>
+  <form action="{% url 'clear_history' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger mt-3">Clear History</button>
+  </form>  
+</div>
+{% else %}
+<p>No previous image processing results.</p>
+{% endif %}
 {% endblock %}

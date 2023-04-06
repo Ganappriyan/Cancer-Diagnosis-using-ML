@@ -1,7 +1,94 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Welcome to Cancer Diagnosis</h1>
-  <p>This is a simple Django project for diagnosing cancer.</p>
+<div class="container mt-4">
+  <h1>Cancer Diagnosis using Machine Learning</h1>
+  <p class="lead">This project aims to diagnose cervical cancer using machine learning algorithms. We have trained our
+    models to detect Dyskeratotic, Koilocytic, Metaplastic, Parabasal, Superficial-Intermediate cells in cervical smear
+    images, and classify them into one of four categories: High-grade squamous intraepithelial lesion (HSIL), Low-grade
+    squamous intraepithelial lesion (LSIL), Negative for intraepithelial malignancy, and Squamous cell carcinoma.</p>
+
+  <h2 class="mt-4">Data Trained for:</h2>
+  <div class="row mt-4">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Cell Types:</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><b>Dyskeratotic:</b> Dyskeratotic cells are characterized by abnormal
+              keratinization. They can be a sign of inflammation or damage to the epithelial tissue, and may be seen in
+              certain types of cancer.</li>
+            <li class="list-group-item"><b>Koilocytic:</b> Koilocytic cells are characterized by a clear halo around the
+              nucleus. They are often caused by the human papillomavirus (HPV) and can be a sign of precancerous or
+              cancerous changes.</li>
+            <li class="list-group-item"><b>Metaplastic:</b> Metaplastic cells are normal cells that have undergone
+              changes
+              in response to injury or inflammation. They can be a sign of a benign or malignant process.</li>
+            <li class="list-group-item"><b>Parabasal:</b> Parabasal cells are immature cells that are normally found in
+              the basal layer of the epithelium. They can be a sign of inflammation, infection, or precancerous changes.
+            </li>
+            <li class="list-group-item"><b>Superficial-Intermediate:</b> Superficial-Intermediate cells are cells that
+              have begun to differentiate and move towards the surface of the epithelium. They can be a sign of
+              inflammation or infection, but are usually not associated with cancer.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Classification:</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><b>High-grade squamous intraepithelial lesion (HSIL):</b> A precancerous
+              condition
+              where the cells in the cervical or vaginal epithelium are severely abnormal. It is often caused by the
+              human
+              papillomavirus (HPV) and can lead to cervical cancer if left untreated.</li>
+            <li class="list-group-item"><b>Low-grade squamous intraepithelial lesion (LSIL):</b> A precancerous
+              condition
+              where the cells in the cervical or vaginal epithelium are mildly to moderately abnormal. It is often
+              caused
+              by the human papillomavirus (HPV) and may progress to HSIL if left untreated.</li>
+            <li class="list-group-item"><b>Negative for intraepithelial malignancy:</b> No abnormal cells were detected
+              in
+              the sample.</li>
+            <li class="list-group-item"><b>Squamous cell carcinoma:</b> A type of cancer that arises from the squamous
+              cells in the epithelium. It can be aggressive and may spread to other parts of the body.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<h2 class="mt-4">Team Members:</h2>
+<ul>
+  <li>Ganappriyan C</li>
+  <li>Dhivya Dharshini M</li>
+  <li>Subavarshini S</li>
+  <li>Sathiya Moorthy S</li>
+</ul>
+
+<h2 class="mt-4 fw-bold">Github Link:</h2>
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="https://cdn.pixabay.com/photo/2017/08/05/11/16/logo-2582748_1280.png" alt="Github Logo"
+        class="img-fluid">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">Cancer Diagnosis using ML</h5>
+        <p class="card-text">Visit our Github repository to access the code and project documentation.</p>
+        <a href="https://github.com/Ganappriyan/Cancer-Diagnosis-using-ML" class="btn btn-primary" target="_blank">View
+          on Github</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
 {% endblock %}
-    

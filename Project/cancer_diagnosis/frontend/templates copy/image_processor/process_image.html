@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Process Image</h1>
+  {% if error_message %}
+    <p style="color: red">{{ error_message }}</p>
+  {% endif %}
+  {% if response_text %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">Classification: {{ response_text['classification'] }}</h5>
+      {% if response_text['classification'] == 'cervix_dyk' %}
+        <div class="card-text">
+          <img src="{% static 'img/dyskeratotic.jpg' %}" alt="Dyskeratotic">
+          <p>Dyskeratotic</p>
+        </div>
+      {% elif response_text['classification'] == 'cervix_koc' %}
+        <div class="card-text">
+          <img src="{% static 'img/koilocytic.jpg' %}" alt="Koilocytic">
+          <p>Koilocytic</p>
+        </div>
+      {% elif response_text['classification'] == 'cervix_mep' %}
+        <div class="card-text">
+          <img src="{% static 'img/metaplastic.jpg' %}" alt="Metaplastic">
+          <p>Metaplastic</p>
+        </div>
+      {% elif response_text['classification'] == 'cervix_pab' %}
+        <div class="card-text">
+          <img src="{% static 'img/parabasal.jpg' %}" alt="Parabasal">
+          <p>Parabasal</p>
+        </div>
+      {% elif response_text['classification'] == 'cervix_sfi' %}
+        <div class="card-text">
+          <img src="{% static 'img/superficial_intermediate.jpg' %}" alt="Superficial-Intermediate">
+          <p>Superficial-Intermediate</p>
+        </div>
+      {% endif %}
+
+      <h5 class="card-title">Grading: {{ response_text['grading'] }}</h5>
+      {% if response_text['grading'] == 'hsil' %}
+        <div class="card-text">
+          <img src="{% static 'img/hsil.jpg' %}" alt="High-grade squamous intraepithelial lesion">
+          <p>Grade 1</p>
+        </div>
+      {% elif response_text['grading'] == 'lsil' %}
+        <div class="card-text">
+          <img src="{% static 'img/lsil.jpg' %}" alt="Low-grade squamous intraepithelial lesion">
+          <p>Grade 2</p>
+        </div>
+      {% elif response_text['grading'] == 'normal' %}
+        <div class="card-text">
+          <img src="{% static 'img/normal.jpg' %}" alt="Negative for intraepithelial malignancy">
+          <p>Grade 3</p>
+        </div>
+      {% elif response_text['grading'] == 'scc' %}
+        <div class="card-text">
+          <img src="{% static 'img/scc.jpg' %}" alt="Squamous cell carcinoma">
+          <p>Grade 3</p>
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+{% endif %}
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="file">
+    <br><br>
+    <input type="submit" value="Process">
+  </form>
+  <a href="{% url 'history' %}">View History</a>
+{% endblock %}

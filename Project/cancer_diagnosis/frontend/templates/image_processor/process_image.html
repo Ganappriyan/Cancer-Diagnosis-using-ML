@@ -1,18 +1,304 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Process Image</h1>
-  {% if error_message %}
-    <p style="color: red">{{ error_message }}</p>
-  {% endif %}
-  {% if response_text %}
-    <p>Server response: {{ response_text }}</p>
-  {% endif %}
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="file" name="file">
-    <br><br>
-    <input type="submit" value="Process">
-  </form>
-  <a href="{% url 'history' %}">View History</a>
+<h2>Process Image</h2>
+{% if error_message %}
+<div class="alert alert-danger">{{ error_message }}</div>
+{% endif %}
+<form class="mt-4 mb-4" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label for="file" class="form-label">Choose an image file:</label>
+    <input class="form-control" type="file" name="file" id="file">
+  </div>
+  <div class="mt-3">
+    <button class="btn btn-primary" type="submit">Process</button>
+    <a class="btn btn-secondary" href="{% url 'history' %}">View History</a>
+  </div>
+</form>
+{% if grading %}
+<div class="card mb-3">
+  <div class="card-body d-flex flex-row">
+    <div class="col-lg-4 mb-5 mt-2 ms-3">
+      <h5 class="card-title">Result:</h5>
+      {% if grading == 'hsil' %}
+      <!-- High-grade squamous intraepithelial lesion -->
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">High-grade Squamous Intraepithelial Lesion</h5>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#highGradeSILModal">Learn
+            More</button>
+        </div>
+      </div>
+      <!-- High-grade squamous intraepithelial lesion Modal -->
+      <div class="modal fade" id="highGradeSILModal" tabindex="-1" aria-labelledby="highGradeSILModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="highGradeSILModalLabel">High-grade Squamous Intraepithelial
+                Lesion</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>A high-grade squamous intraepithelial lesion (HSIL) is a precancerous condition where
+                the cells in the cervical or vaginal epithelium are severely abnormal. It is often
+                caused by the human papillomavirus (HPV) and can lead to cervical cancer if left
+                untreated.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% elif grading == 'lsil' %}
+      <!-- Low-grade squamous intraepithelial lesion -->
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Low-grade Squamous Intraepithelial Lesion</h5>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#lowGradeSILModal">Learn
+            More</button>
+        </div>
+      </div>
+      <!-- Low-grade squamous intraepithelial lesion Modal -->
+      <div class="modal fade" id="lowGradeSILModal" tabindex="-1" aria-labelledby="lowGradeSILModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="lowGradeSILModalLabel">Low-grade Squamous Intraepithelial
+                Lesion</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>A low-grade squamous intraepithelial lesion (LSIL) is a precancerous condition where
+                the cells in the cervical or vaginal epithelium are mildly to moderately abnormal.
+                It is also often caused by the human papillomavirus (HPV) and can sometimes progress
+                to high-grade SIL if left untreated.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% elif grading == 'normal' %}
+      <!-- Negative for intraepithelial malignancy -->
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Negative for Intraepithelial Malignancy</h5>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#negativeMalignancyModal">Learn More</button>
+        </div>
+      </div>
+      <!-- Negative for intraepithelial malignancy Modal -->
+      <div class="modal fade" id="negativeMalignancyModal" tabindex="-1" aria-labelledby="negativeMalignancyModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="negativeMalignancyModalLabel">Negative for Intraepithelial
+                Malignancy</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>A negative result for intraepithelial malignancy means that no abnormal cells were
+                found in the cervical or vaginal epithelium. This is a normal result and indicates
+                that there is no evidence of precancerous or cancerous changes in the cells.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% elif grading == 'scc' %}
+      <!-- Squamous cell carcinoma -->
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Squamous Cell Carcinoma</h5>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#squamousCarcinomaModal">Learn More</button>
+        </div>
+      </div>
+      <!-- Squamous cell carcinoma Modal -->
+      <div class="modal fade" id="squamousCarcinomaModal" tabindex="-1" aria-labelledby="squamousCarcinomaModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="squamousCarcinomaModalLabel">Squamous Cell Carcinoma</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Squamous cell carcinoma (SCC) is a type of cancer that can develop in the cervical or
+                vaginal epithelium. It is often caused by HPV and can be detected through a Pap
+                smear. Treatment options depend on the stage of the cancer, but may include surgery,
+                radiation therapy, and chemotherapy.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    {% if classification %}
+    <div class="col-lg-4 mb-5 mt-2 ms-5">
+      <h5 class="card-title">Classification:</h5>
+      {% if classification == 'cervix_dyk' %}
+      <!-- Dyskeratotic Cell -->
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Dyskeratotic Cell</h5>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dyskeratoticModal">Learn
+            More</button>
+        </div>
+      </div>
+      <!-- Dyskeratotic Modal -->
+      <div class="modal fade" id="dyskeratoticModal" tabindex="-1" aria-labelledby="dyskeratoticModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="dyskeratoticModalLabel">Dyskeratotic Cell</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Dyskeratotic cells are characterized by abnormal keratinization. They can be a sign
+                of inflammation or damage to the epithelial tissue, and may be seen in certain types
+                of cancer.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% elif classification == 'cervix_koc' %}
+      <!-- Koilocytic Cell -->
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Koilocytic Cell</h5>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#koilocyticModal">Learn
+            More</button>
+        </div>
+      </div>
+      <!-- Koilocytic Modal -->
+      <div class="modal fade" id="koilocyticModal" tabindex="-1" aria-labelledby="koilocyticModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="koilocyticModalLabel">Koilocytic Cell</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Koilocytic cells are often associated with human papillomavirus (HPV) infection. They
+                are characterized by a large, irregularly shaped nucleus and a clear, "halo"
+                appearance around the nucleus. Koilocytic cells may be seen in certain types of
+                cancer.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% elif classification == 'cervix_mep' %}
+      <!-- Metaplastic Cell -->
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Metaplastic Cell</h5>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#metaplasticModal">Learn
+            More</button>
+        </div>
+      </div>
+      <!-- Metaplastic Modal -->
+      <div class="modal fade" id="metaplasticModal" tabindex="-1" aria-labelledby="metaplasticModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="metaplasticModalLabel">Metaplastic Cell</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Metaplastic cells are cells that have undergone a change in their differentiation,
+                often in response to injury or inflammation. They can be seen in various tissues and
+                organs, and may be associated with certain types of cancer.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% elif classification == 'cervix_pab' %}
+      <!-- Parabasal Cell -->
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Parabasal Cell</h5>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#parabasalModal">Learn
+            More</button>
+        </div>
+      </div>
+      <!-- Parabasal Modal -->
+      <div class="modal fade" id="parabasalModal" tabindex="-1" aria-labelledby="parabasalModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="parabasalModalLabel">Parabasal Cell</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Parabasal cells are characterized by a large nucleus and minimal cytoplasm. They are
+                often seen in the early stages of cervical cancer.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% elif classification == 'cervix_sfi' %}
+      <!-- Superficial-Intermediate Cell -->
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Superficial-Intermediate Cell</h5>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#superficialIntermediateModal">Learn More</button>
+        </div>
+      </div>
+      <!-- Superficial-Intermediate Modal -->
+      <div class="modal fade" id="superficialIntermediateModal" tabindex="-1"
+        aria-labelledby="superficialIntermediateModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="superficialIntermediateModalLabel">Superficial-Intermediate
+                Cell</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Superficial-intermediate cells are cells that are located in the outer layers of the
+                epithelium. They are often seen in the early stages of cervical cancer, and may be a
+                sign of cellular differentiation.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
 {% endblock %}
