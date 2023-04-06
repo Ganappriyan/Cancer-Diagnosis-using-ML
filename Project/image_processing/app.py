@@ -4,8 +4,8 @@ import json
 
 app = FastAPI()
 
-classification_model = CNNModel(modelname="classification", filename="lenet.h5")
-grading_model = CNNModel(modelname="grade", filename="simple_softmax.h5")
+classification_model = CNNModel(modelname="classification", filename="simple_noarg.h5")
+grading_model = CNNModel(modelname="grade", filename="simple_noarg.h5")
 
 @app.post("/process/")
 async def classify_image(file: UploadFile = File(...)):

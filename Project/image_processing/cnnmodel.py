@@ -1,23 +1,40 @@
 import tensorflow as tf
 import os
+import json
 
 from filepaths import modelsDir, dataDir
 from model_definition import SegmentationModel
 
 class CNNModel:
     
-    def __init__(self, modelname, filename, modelkind='simple'):
+    def __init__(self, modelname, filename, modelkind='simple', image_argumentation=True):
         self.modelkind = modelkind
         self.modelname = modelname
         self.filename = filename
-        self.image_generator = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1/255, validation_split=0.2)
-        self.callbacks = [
-            tf.keras.callbacks.EarlyStopping(
-                monitor='val_loss',
-                patience=5,
-                restore_best_weights=True,
+        
+        if not os.path.exists(dataDir):
+            os.mkdir(dataDir)
+        if not os.path.exists(modelsDir):
+            os.mkdir(modelsDir)
+        if not os.path.exists(dataDir + self.modelname):
+            os.mkdir(dataDir + self.modelname)
+        if not os.path.exists(modelsDir + self.modelname):
+            os.mkdir(modelsDir + self.modelname)
+        
+        if image_argumentation:
+            self.image_generator = tf.keras.preprocessing.image.ImageDataGenerator(
+                rescale=1/255,
+                validation_split=0.2,
+                rotation_range=30,
+                horizontal_flip=True,
+                brightness_range=[0.6,1.0],
+                zoom_range=[0.7,1.0],
             )
-        ]
+        else:
+            self.image_generator = tf.keras.preprocessing.image.ImageDataGenerator(
+                rescale=1/255,
+                validation_split=0.2,
+            )
         self.train_generator = self.image_generator.flow_from_directory(
             directory=dataDir+self.modelname+"/",
             target_size=(512, 512),
@@ -40,14 +57,9 @@ class CNNModel:
             self.create()
             
     def create(self):
-        if not os.path.exists(dataDir + self.modelname):
-            os.mkdir(dataDir + self.modelname)
-        if not os.path.exists(modelsDir + self.modelname):
-            os.mkdir(modelsDir + self.modelname)
-        
         img_shape = self.train_generator.image_shape
         
-        self.model = SegmentationModel(modelname=self.modelkind, 
+        self.model = SegmentationModel(modelkind=self.modelkind, 
                                        input_shape=(img_shape[0], img_shape[1], 3), 
                                        classes=len(self.classes)).model
         
@@ -57,13 +69,21 @@ class CNNModel:
             metrics=['accuracy'],
         )
         
-    def train(self, epochs=20):
-        self.model.fit(
+    def train(self, epochs=20, callback_patience=5, save_historyname=None):
+        callbacks = [
+            tf.keras.callbacks.EarlyStopping(
+                monitor='val_loss',
+                patience=callback_patience,
+                restore_best_weights=True,
+            )
+        ]
+        self.history = self.model.fit(
             self.train_generator,
             validation_data=self.validation_generator,
             epochs=epochs,
-            callbacks=self.callbacks
+            callbacks=callbacks
         )
+        return self.history
     
     def predict(self, img_bytes):
         img = tf.image.decode_image(img_bytes)
@@ -80,4 +100,9 @@ class CNNModel:
         
         if filename:
             self.model.save(modelsDir + self.modelname + "/" + filename)
-        self.model.save(modelsDir + self.modelname + "/" + self.filename)
+            with open(modelsDir + self.modelname + "/" + filename[:-3] + '_history', 'w') as f:
+                json.dump(self.history.history, f)
+        else:
+            self.model.save(modelsDir + self.modelname + "/" + self.filename)
+            with open(modelsDir + self.modelname + "/" + self.filename[:-3] + '_history', 'w') as f:
+                json.dump(self.history.history, f)
