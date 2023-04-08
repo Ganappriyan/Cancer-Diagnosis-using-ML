@@ -91,6 +91,7 @@ class CNNModel:
         img = tf.image.resize(img, (512, 512))
         predictions = self.model.predict(img)
         dict_obj = {k: float(predictions[0][v]) for k, v in self.classes.items()}
+        print(dict_obj)
         dict_obj['maxlabel'] = max(dict_obj, key=dict_obj.get)
         return dict_obj
     
