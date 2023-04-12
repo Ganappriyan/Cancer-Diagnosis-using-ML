@@ -35,7 +35,7 @@ def save_response_content(response, destination):
 # file_id = '1L-5EPgPTJzq73jEe5L28JAl_1SUioYjJ'
 url1 = "https://www.googleapis.com/drive/v3/files/1L-5EPgPTJzq73jEe5L28JAl_1SUioYjJ?alt=media&key=AIzaSyCusL2jXa17co43qqGhQdlZie_XmRFe-SQ"
 url2 = "https://www.googleapis.com/drive/v3/files/1I1smsK2SyjNIgKOgLvijCuZDOzILCD7U?alt=media&key=AIzaSyCusL2jXa17co43qqGhQdlZie_XmRFe-SQ"
-destination1 = 'model/classification/simple_noarg.h5'
-destination2 = 'model/grade/simple_noarg.h5'
+destination1 = '/workspace/Cancer-Diagnosis-using-ML/Project/image_processing/model/classification/simple_noarg.h5'
+destination2 = '/workspace/Cancer-Diagnosis-using-ML/Project/image_processing/model/grade/simple_noarg.h5'
 # download_file_from_google_drive(url1, destination1)
 download_file_from_google_drive(url2, destination2)
