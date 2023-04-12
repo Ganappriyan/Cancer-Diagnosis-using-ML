@@ -52,8 +52,10 @@ class CNNModel:
         self.classes = self.train_generator.class_indices
         
         if os.path.exists(modelsDir + modelname + "/" + filename):
+            print("Loading model from file")
             self.model = tf.keras.models.load_model(modelsDir + modelname + "/" + filename)
         else:
+            print("Creating new model")
             self.create()
             
     def create(self):

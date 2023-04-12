@@ -8,7 +8,7 @@ classification_model = CNNModel(modelname="classification", filename="simple_noa
 grading_model = CNNModel(modelname="grade", filename="simple_noarg.h5")
 
 @app.post("/process/")
-async def classify_image(file: UploadFile = File(...)):
+async def process_image(file: UploadFile = File(...)):
     img_bytes = await file.read()
     return {'classification': classification_model.predict(img_bytes), 
             'grading': grading_model.predict(img_bytes),}

@@ -1,2 +1,2 @@
-modelsDir = "models/"
+modelsDir = "model/"
 dataDir = "data/"
