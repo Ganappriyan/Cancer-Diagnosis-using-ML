@@ -23,11 +23,8 @@ def process_image(request):
         except (requests.exceptions.ConnectionError):
             return render(request, 'image_processor/process_image.html', {'error_message': 'No Response Received from Image Processor'})
         
-        print(type(response.json()), response.json())
         dict_obj = response.json()
-        print(type(dict_obj), dict_obj)
         classification = dict_obj['classification']
-        print(type(classification), classification)
         grading = dict_obj['grading']
         
         response_text = {'grading': grading['maxlabel']}
