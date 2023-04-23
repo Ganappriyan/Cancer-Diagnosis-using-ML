@@ -63,10 +63,10 @@ Once the project is set up, follow these steps to use the application:
 ## Contributors
 This project was developed by the following contributors:
 
-- [Ganappriyan](https://github.com/Ganappriyan)
-- [Dhivyamuthu Manickam](https://github.com/dhivyamuthumanickam)
-- [Subavarshini Srinivasan](https://github.com/subavarshinis)
-- [Sathiya Murugan](https://github.com/Sathiya10)
+- [Ganappriyan C](https://github.com/Ganappriyan)
+- [Dhivya Dharshini M](https://github.com/dhivyamuthumanickam)
+- [Subavarshini Sivaraman](https://github.com/subavarshinis)
+- [Sathiya Moorthy S](https://github.com/Sathiya10)
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
