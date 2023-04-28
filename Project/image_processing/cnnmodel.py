@@ -54,6 +54,11 @@ class CNNModel:
         if os.path.exists(modelsDir + modelname + "/" + filename):
             print("Loading model from file")
             self.model = tf.keras.models.load_model(modelsDir + modelname + "/" + filename)
+            if os.path.exists(modelsDir + modelname + "/" + filename[:-3] + '_history.json'):
+                self.history = json.load(open(modelsDir + modelname + "/" + filename[:-3] + '_history.json'))
+        elif os.path.exists(modelsDir + modelname + "/" + filename[:-3] + '_checkpoint.h5'):
+            print("Loading model from checkpoint")
+            self.model = tf.keras.models.load_model(modelsDir + modelname + "/" + filename[:-3] + '_checkpoint.h5')
         else:
             print("Creating new model")
             self.create()
@@ -77,7 +82,12 @@ class CNNModel:
                 monitor='val_loss',
                 patience=callback_patience,
                 restore_best_weights=True,
-            )
+            ),
+            tf.keras.callbacks.ModelCheckpoint(
+                modelsDir + self.modelname + "/" + self.filename[:-3]+'_checkpoint.h5', 
+                monitor='val_loss', 
+                save_best_only=True
+            ),
         ]
         self.history = self.model.fit(
             self.train_generator,
@@ -93,7 +103,7 @@ class CNNModel:
         img = tf.image.resize(img, (512, 512))
         predictions = self.model.predict(img)
         dict_obj = {k: float(predictions[0][v]) for k, v in self.classes.items()}
-        print(dict_obj)
+        # print(dict_obj)
         dict_obj['maxlabel'] = max(dict_obj, key=dict_obj.get)
         return dict_obj
     
@@ -103,9 +113,9 @@ class CNNModel:
         
         if filename:
             self.model.save(modelsDir + self.modelname + "/" + filename)
-            with open(modelsDir + self.modelname + "/" + filename[:-3] + '_history', 'w') as f:
+            with open(modelsDir + self.modelname + "/" + filename[:-3] + '_history.json', 'w') as f:
                 json.dump(self.history.history, f)
         else:
             self.model.save(modelsDir + self.modelname + "/" + self.filename)
-            with open(modelsDir + self.modelname + "/" + self.filename[:-3] + '_history', 'w') as f:
+            with open(modelsDir + self.modelname + "/" + self.filename[:-3] + '_history.json', 'w') as f:
                 json.dump(self.history.history, f)

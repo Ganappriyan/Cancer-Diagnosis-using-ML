@@ -1,3 +1,4 @@
 .gitpod.yml
 __pycache__
 model
+data
